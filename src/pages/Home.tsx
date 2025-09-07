@@ -1,9 +1,5 @@
 import {
-    AnimatedBackground,
-    InteractiveButton,
-    NotificationSystem,
-    ProgressIndicator,
-    TodoStats
+  NotificationSystem
 } from '@/components';
 import { commonShortcuts, useDebounce, useKeyboardShortcuts, useLocalStorage } from '@/hooks';
 import { BaseComponent, Notification, Todo } from '@/types';
@@ -32,12 +28,12 @@ const Home = ({ className }: HomeProps) => {
       ...notification,
       id: Date.now().toString(),
     };
-    setNotifications(prev => [...prev, newNotification]);
+    setNotifications((prev: Notification[]) => [...prev, newNotification]);
   }, []);
 
   // 移除通知
   const removeNotification = useCallback((id: string) => {
-    setNotifications(prev => prev.filter(n => n.id !== id));
+    setNotifications((prev: Notification[]) => prev.filter(n => n.id !== id));
   }, []);
 
   const addTodo = useCallback(() => {
@@ -135,7 +131,7 @@ const Home = ({ className }: HomeProps) => {
   const shortcuts = useMemo(() => [
     commonShortcuts.search(() => {
       setSearchQuery('');
-      document.querySelector('input[type="text"]')?.focus();
+      (document.querySelector('input[type="text"]') as HTMLInputElement)?.focus();
     }),
     commonShortcuts.new(() => setShowAddForm(true)),
     commonShortcuts.all(() => setFilter('all')),
@@ -149,23 +145,14 @@ const Home = ({ className }: HomeProps) => {
 
   useKeyboardShortcuts(shortcuts);
 
-  // 獲取優先級顏色
-  const getPriorityColor = (priority: string = 'medium') => {
-    switch (priority) {
-      case 'high': return 'text-error-600 dark:text-error-400';
-      case 'medium': return 'text-warning-600 dark:text-warning-400';
-      case 'low': return 'text-success-600 dark:text-success-400';
-      default: return 'text-gray-600 dark:text-gray-400';
-    }
-  };
 
   // 獲取優先級圖標
   const getPriorityIcon = (priority: string = 'medium') => {
     switch (priority) {
-      case 'high': return '🔴';
-      case 'medium': return '🟡';
-      case 'low': return '🟢';
-      default: return '⚪';
+      case 'high': return '';
+      case 'medium': return '';
+      case 'low': return '';
+      default: return '';
     }
   };
 
@@ -175,280 +162,346 @@ const Home = ({ className }: HomeProps) => {
   };
 
   return (
-    <div className={`min-h-screen relative overflow-hidden ${className || ''}`}>
+    <div className={`min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 ${className || ''}`}>
       {/* 動畫背景 */}
-      <AnimatedBackground 
-        type="particles" 
-        intensity="medium" 
-        color="rainbow" 
-        className="z-0"
-      />
+      <div className="fixed inset-0 opacity-20" style={{
+        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+      }}></div>
       
       {/* 主要內容 */}
-      <div className="relative z-10 container mx-auto container-padding py-8">
+      <div className="relative z-10 container mx-auto px-4 py-12">
         {/* 標題區域 */}
-        <div className="text-center mb-12 fade-in-up">
-          <h1 className="text-5xl font-bold mb-6 neon-text animate-pulse-slow">
-            ✨ 智能待辦事項管理 ✨
-          </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
-            一個融合現代設計與先進技術的任務管理工具，為您帶來前所未有的工作效率體驗
+        <div className="text-center mb-16">
+          <div className="inline-block relative">
+            <h1 className="text-6xl font-black bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent mb-6 tracking-tight">
+              TaskFlow
+            </h1>
+            <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-lg blur opacity-30 animate-pulse"></div>
+          </div>
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed mb-12">
+            優雅、高效、直觀的任務管理體驗
           </p>
           
           {/* 進度指示器 */}
-          <div className="mt-8 max-w-md mx-auto">
-            <ProgressIndicator
-              progress={Math.round((completedCount / Math.max(todos.length, 1)) * 100)}
-              variant="wave"
-              color="rainbow"
-              size="lg"
-              label="整體完成度"
-              animated={true}
-            />
+          <div className="max-w-sm mx-auto">
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+              <div className="text-sm text-gray-300 mb-3">完成進度</div>
+              <div className="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-1000 ease-out"
+                  style={{ width: `${Math.round((completedCount / Math.max(todos.length, 1)) * 100)}%` }}
+                />
+              </div>
+              <div className="text-right text-sm text-gray-400 mt-2">
+                {Math.round((completedCount / Math.max(todos.length, 1)) * 100)}%
+              </div>
+            </div>
           </div>
         </div>
 
         {/* 統計組件 */}
-        <div className="mb-8 fade-in-up" style={{ animationDelay: '0.1s' }}>
-          <div className="card-premium particles">
-            <TodoStats todos={todos} showDetails={showTools} />
+        <div className="mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-gray-400 text-sm">總任務</p>
+                  <p className="text-3xl font-bold text-white">{todos.length}</p>
+                </div>
+                <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center">
+                  <span className="text-2xl"></span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-gray-400 text-sm">待完成</p>
+                  <p className="text-3xl font-bold text-yellow-400">{activeCount}</p>
+                </div>
+                <div className="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center">
+                  <span className="text-2xl"></span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-gray-400 text-sm">已完成</p>
+                  <p className="text-3xl font-bold text-green-400">{completedCount}</p>
+                </div>
+                <div className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center">
+                  <span className="text-2xl"></span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-gray-400 text-sm">已過期</p>
+                  <p className="text-3xl font-bold text-red-400">{overdueCount}</p>
+                </div>
+                <div className="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center">
+                  <span className="text-2xl"></span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* 搜尋和篩選區域 */}
-        <div className="glass-card max-w-4xl mx-auto mb-8 fade-in-up" style={{ animationDelay: '0.2s' }}>
-          <div className="flex flex-col md:flex-row gap-4 mb-4">
-            <div className="flex-1">
-              <label className="label text-white/90">🔍 搜尋任務</label>
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="搜尋任務或分類... (Ctrl+K)"
-                className="input glass bg-white/10 border-white/20 text-white placeholder-white/60"
-              />
-            </div>
-            <div className="flex gap-3">
-              <InteractiveButton
-                onClick={() => setShowAddForm(!showAddForm)}
-                variant="magic"
-                size="md"
-                icon={showAddForm ? '✕' : '➕'}
-                iconPosition="left"
-              >
-                {showAddForm ? '取消' : '新增任務'}
-              </InteractiveButton>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
-                className="input glass bg-white/10 border-white/20 text-white"
-              >
-                <option value="created">按創建時間</option>
-                <option value="priority">按優先級</option>
-                <option value="dueDate">按截止日期</option>
-              </select>
+        <div className="max-w-6xl mx-auto mb-12">
+          <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10">
+            <div className="flex flex-col lg:flex-row gap-6">
+              <div className="flex-1">
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="搜尋任務..."
+                    className="w-full bg-white/10 border border-white/20 rounded-2xl px-6 py-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300"
+                  />
+                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                    搜尋
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button
+                  onClick={() => setShowAddForm(!showAddForm)}
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-2xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg flex items-center justify-center gap-2"
+                >
+                  <span className="text-xl">{showAddForm ? 'X' : '+'}</span>
+                  {showAddForm ? '取消' : '新增任務'}
+                </button>
+                
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as any)}
+                  className="bg-white/10 border border-white/20 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300"
+                >
+                  <option value="created">按創建時間</option>
+                  <option value="priority">按優先級</option>
+                  <option value="dueDate">按截止日期</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
 
         {/* 添加任務表單 */}
         {showAddForm && (
-          <div className="card-premium max-w-2xl mx-auto mb-8 fade-in-up animate-scale-in">
-            <h2 className="text-2xl font-bold text-white mb-6 text-center">
-              ✨ 添加新任務 ✨
-            </h2>
-            <div className="space-y-6">
-              <div>
-                <label className="label text-white/90">📝 任務內容 *</label>
-                <input
-                  type="text"
-                  value={newTodo}
-                  onChange={(e) => setNewTodo(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && addTodo()}
-                  placeholder="輸入您的任務..."
-                  className="input glass bg-white/10 border-white/20 text-white placeholder-white/60"
-                  autoFocus
-                />
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="max-w-2xl mx-auto mb-12">
+            <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10">
+              <h2 className="text-3xl font-bold text-white mb-8 text-center">
+                添加新任務
+              </h2>
+              <div className="space-y-6">
                 <div>
-                  <label className="label text-white/90">⚡ 優先級</label>
-                  <select
-                    value={newTodoPriority}
-                    onChange={(e) => setNewTodoPriority(e.target.value as any)}
-                    className="input glass bg-white/10 border-white/20 text-white"
-                  >
-                    <option value="low">🟢 低</option>
-                    <option value="medium">🟡 中</option>
-                    <option value="high">🔴 高</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="label text-white/90">🏷️ 分類</label>
+                  <label className="block text-gray-300 text-sm font-medium mb-3">任務內容 *</label>
                   <input
                     type="text"
-                    value={newTodoCategory}
-                    onChange={(e) => setNewTodoCategory(e.target.value)}
-                    placeholder="工作、生活、學習..."
-                    className="input glass bg-white/10 border-white/20 text-white placeholder-white/60"
+                    value={newTodo}
+                    onChange={(e) => setNewTodo(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && addTodo()}
+                    placeholder="輸入您的任務..."
+                    className="w-full bg-white/10 border border-white/20 rounded-2xl px-6 py-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300"
+                    autoFocus
                   />
                 </div>
-                <div>
-                  <label className="label text-white/90">📅 截止日期</label>
-                  <input
-                    type="date"
-                    value={newTodoDueDate}
-                    onChange={(e) => setNewTodoDueDate(e.target.value)}
-                    className="input glass bg-white/10 border-white/20 text-white"
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div>
+                    <label className="block text-gray-300 text-sm font-medium mb-3">優先級</label>
+                    <select
+                      value={newTodoPriority}
+                      onChange={(e) => setNewTodoPriority(e.target.value as any)}
+                      className="w-full bg-white/10 border border-white/20 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300"
+                    >
+                      <option value="low">低</option>
+                      <option value="medium">中</option>
+                      <option value="high">高</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-gray-300 text-sm font-medium mb-3">分類</label>
+                    <input
+                      type="text"
+                      value={newTodoCategory}
+                      onChange={(e) => setNewTodoCategory(e.target.value)}
+                      placeholder="工作、生活、學習..."
+                      className="w-full bg-white/10 border border-white/20 rounded-2xl px-6 py-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-300 text-sm font-medium mb-3">截止日期</label>
+                    <input
+                      type="date"
+                      value={newTodoDueDate}
+                      onChange={(e) => setNewTodoDueDate(e.target.value)}
+                      className="w-full bg-white/10 border border-white/20 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300"
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="flex gap-3 justify-center">
-                <InteractiveButton
-                  onClick={addTodo}
-                  disabled={!newTodo.trim()}
-                  variant="liquid"
-                  size="lg"
-                  icon="✨"
-                  iconPosition="left"
-                >
-                  添加任務
-                </InteractiveButton>
-                <InteractiveButton
-                  onClick={() => setShowAddForm(false)}
-                  variant="glass"
-                  size="lg"
-                  icon="✕"
-                  iconPosition="left"
-                >
-                  取消
-                </InteractiveButton>
+                <div className="flex gap-4 justify-center pt-4">
+                  <button
+                    onClick={addTodo}
+                    disabled={!newTodo.trim()}
+                    className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white px-8 py-4 rounded-2xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg flex items-center gap-2"
+                  >
+                    <span>新增</span>
+                    添加任務
+                  </button>
+                  <button
+                    onClick={() => setShowAddForm(false)}
+                    className="bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-2xl font-semibold transition-all duration-300 hover:scale-105 flex items-center gap-2"
+                  >
+                    <span>X</span>
+                    取消
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         )}
 
         {/* 篩選按鈕 */}
-        <div className="flex justify-center gap-3 mb-8 fade-in-up" style={{ animationDelay: '0.3s' }}>
+        <div className="flex justify-center gap-4 mb-12">
           {([
-            { id: 'all', label: '全部', icon: '📋', variant: 'neon' as const },
-            { id: 'active', label: '待完成', icon: '⏳', variant: 'magnetic' as const },
-            { id: 'completed', label: '已完成', icon: '✅', variant: 'ripple' as const }
+            { id: 'all', label: '全部', icon: '' },
+            { id: 'active', label: '待完成', icon: '' },
+            { id: 'completed', label: '已完成', icon: '' }
           ] as const).map((filterType) => (
-            <InteractiveButton
+            <button
               key={filterType.id}
               onClick={() => setFilter(filterType.id as any)}
-              variant={filter === filterType.id ? 'magic' : filterType.variant}
-              size="md"
-              icon={filterType.icon}
-              iconPosition="left"
-              className={filter === filterType.id ? 'animate-pulse' : ''}
+              className={`px-8 py-4 rounded-2xl font-semibold transition-all duration-300 flex items-center gap-3 ${
+                filter === filterType.id
+                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg scale-105'
+                  : 'bg-white/10 text-gray-300 hover:bg-white/20 hover:text-white'
+              }`}
             >
+              <span className="text-xl">{filterType.icon}</span>
               {filterType.label}
-            </InteractiveButton>
+            </button>
           ))}
         </div>
 
         {/* 任務列表 */}
-        <div className="max-w-4xl mx-auto fade-in-up" style={{ animationDelay: '0.4s' }}>
+        <div className="max-w-6xl mx-auto">
           {filteredTodos.length === 0 ? (
-            <div className="glass-card text-center py-16">
-              <div className="text-6xl mb-6 animate-bounce-slow">📝</div>
-              <h3 className="text-2xl font-bold text-white mb-4">
-                {filter === 'all' ? '還沒有任務' : 
-                 filter === 'active' ? '沒有待完成的任務' : '沒有已完成的任務'}
-              </h3>
-              <p className="text-white/80 text-lg mb-6">
-                {filter === 'all' ? '添加您的第一個任務吧！' : '切換篩選條件查看其他任務'}
-              </p>
-              <InteractiveButton
-                onClick={() => setShowAddForm(true)}
-                variant="magic"
-                size="lg"
-                icon="✨"
-                iconPosition="left"
-              >
-                立即添加任務
-              </InteractiveButton>
+            <div className="text-center py-20">
+              <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-12 border border-white/10 max-w-md mx-auto">
+                <div className="text-6xl mb-6"></div>
+                <h3 className="text-2xl font-bold text-white mb-4">
+                  {filter === 'all' ? '還沒有任務' : 
+                   filter === 'active' ? '沒有待完成的任務' : '沒有已完成的任務'}
+                </h3>
+                <p className="text-gray-300 mb-8">
+                  {filter === 'all' ? '添加您的第一個任務吧！' : '切換篩選條件查看其他任務'}
+                </p>
+                <button
+                  onClick={() => setShowAddForm(true)}
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-2xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg flex items-center gap-2 mx-auto"
+                >
+                  <span>新增</span>
+                  立即添加任務
+                </button>
+              </div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {filteredTodos.map((todo, index) => (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {filteredTodos.map((todo: Todo, index: number) => (
                 <div
                   key={todo.id}
-                  className={`card-premium magnetic transition-all duration-300 ${
-                    todo.completed ? 'opacity-75' : ''
-                  } ${isOverdue(todo.dueDate) ? 'border-error-400 bg-error-500/10' : ''}`}
+                  className={`bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/10 transition-all duration-300 ${
+                    todo.completed ? 'opacity-60' : ''
+                  } ${isOverdue(todo.dueDate) ? 'border-red-500/50 bg-red-500/5' : ''}`}
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <div className="flex items-start gap-4">
-                    <InteractiveButton
+                    <button
                       onClick={() => toggleTodo(todo.id)}
-                      variant={todo.completed ? 'success' : 'glass'}
-                      size="sm"
-                      icon={todo.completed ? '✓' : '○'}
-                      className="flex-shrink-0"
-                    />
+                      className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                        todo.completed
+                          ? 'bg-green-500 border-green-500 text-white'
+                          : 'border-gray-400 hover:border-blue-500'
+                      }`}
+                    >
+                      {todo.completed && ''}
+                    </button>
                     
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-3">
-                        <span
+                      <div className="flex items-start justify-between mb-3">
+                        <h3
                           className={`text-lg font-semibold transition-all ${
                             todo.completed
-                              ? 'line-through text-white/60'
+                              ? 'line-through text-gray-400'
                               : 'text-white'
                           }`}
                         >
                           {todo.text}
-                        </span>
+                        </h3>
                         {isOverdue(todo.dueDate) && (
-                          <span className="text-xs bg-error-500/20 text-error-300 px-3 py-1 rounded-full animate-pulse">
-                            ⚠️ 已過期
+                          <span className="text-xs bg-red-500/20 text-red-300 px-3 py-1 rounded-full">
+                            已過期
                           </span>
                         )}
                       </div>
                       
-                      <div className="flex flex-wrap items-center gap-2 text-sm">
+                      <div className="flex flex-wrap items-center gap-2 text-sm mb-4">
                         {todo.priority && (
-                          <span className={`flex items-center gap-1 px-2 py-1 rounded-full bg-white/10 text-white`}>
-                            {getPriorityIcon(todo.priority)}
-                            {todo.priority === 'high' ? '高' : todo.priority === 'medium' ? '中' : '低'}
+                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                            todo.priority === 'high' ? 'bg-red-500/20 text-red-300' :
+                            todo.priority === 'medium' ? 'bg-yellow-500/20 text-yellow-300' :
+                            'bg-green-500/20 text-green-300'
+                          }`}>
+                            {getPriorityIcon(todo.priority)} {todo.priority === 'high' ? '高' : todo.priority === 'medium' ? '中' : '低'}
                           </span>
                         )}
                         {todo.category && (
-                          <span className="px-2 py-1 rounded-full bg-white/10 text-white/90">
-                            🏷️ {todo.category}
+                          <span className="px-3 py-1 rounded-full bg-white/10 text-gray-300 text-xs">
+                            {todo.category}
                           </span>
                         )}
                         {todo.dueDate && (
-                          <span className={`px-2 py-1 rounded-full bg-white/10 text-white/90 ${isOverdue(todo.dueDate) ? 'animate-pulse' : ''}`}>
-                            📅 {new Date(todo.dueDate).toLocaleDateString('zh-TW')}
+                          <span className={`px-3 py-1 rounded-full text-xs ${
+                            isOverdue(todo.dueDate) 
+                              ? 'bg-red-500/20 text-red-300' 
+                              : 'bg-white/10 text-gray-300'
+                          }`}>
+                            {new Date(todo.dueDate).toLocaleDateString('zh-TW')}
                           </span>
                         )}
-                        <span className="text-white/60 text-xs">
-                          {new Date(todo.createdAt).toLocaleDateString('zh-TW')}
-                        </span>
+                      </div>
+                      
+                      <div className="text-xs text-gray-400">
+                        {new Date(todo.createdAt).toLocaleDateString('zh-TW')}
                       </div>
                     </div>
                     
                     <div className="flex items-center gap-2">
-                      <InteractiveButton
+                      <button
                         onClick={() => updateTodo(todo.id, { 
                           priority: todo.priority === 'high' ? 'medium' : 
                                   todo.priority === 'medium' ? 'low' : 'high' 
                         })}
-                        variant="glass"
-                        size="sm"
-                        icon={getPriorityIcon(todo.priority)}
-                        className="opacity-70 hover:opacity-100"
-                      />
-                      <InteractiveButton
+                        className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-gray-400 hover:text-white transition-all duration-300"
+                        title="切換優先級"
+                      >
+                        {getPriorityIcon(todo.priority)}
+                      </button>
+                      <button
                         onClick={() => deleteTodo(todo.id)}
-                        variant="error"
-                        size="sm"
-                        icon="🗑️"
-                        className="opacity-70 hover:opacity-100"
-                      />
+                        className="p-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-400 hover:text-red-300 transition-all duration-300"
+                        title="刪除任務"
+                      >
+                        刪除
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -459,30 +512,26 @@ const Home = ({ className }: HomeProps) => {
 
         {/* 操作按鈕 */}
         {todos.length > 0 && (
-          <div className="flex flex-wrap justify-center gap-4 mt-12 fade-in-up" style={{ animationDelay: '0.5s' }}>
+          <div className="flex flex-wrap justify-center gap-4 mt-16">
             {completedCount > 0 && (
-              <InteractiveButton
+              <button
                 onClick={clearCompleted}
-                variant="glass"
-                size="md"
-                icon="🧹"
-                iconPosition="left"
+                className="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-2xl font-semibold transition-all duration-300 hover:scale-105 flex items-center gap-2"
               >
+                <span>清理</span>
                 清除已完成 ({completedCount})
-              </InteractiveButton>
+              </button>
             )}
             {overdueCount > 0 && (
-              <InteractiveButton
+              <button
                 onClick={() => setFilter('active')}
-                variant="warning"
-                size="md"
-                icon="⚠️"
-                iconPosition="left"
+                className="bg-yellow-500/20 hover:bg-yellow-500/30 text-yellow-300 px-6 py-3 rounded-2xl font-semibold transition-all duration-300 hover:scale-105 flex items-center gap-2"
               >
+                <span></span>
                 查看過期任務 ({overdueCount})
-              </InteractiveButton>
+              </button>
             )}
-            <InteractiveButton
+            <button
               onClick={() => {
                 const dataStr = JSON.stringify(todos, null, 2);
                 const dataBlob = new Blob([dataStr], { type: 'application/json' });
@@ -493,36 +542,32 @@ const Home = ({ className }: HomeProps) => {
                 link.click();
                 URL.revokeObjectURL(url);
               }}
-              variant="neon"
-              size="md"
-              icon="💾"
-              iconPosition="left"
+              className="bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 px-6 py-3 rounded-2xl font-semibold transition-all duration-300 hover:scale-105 flex items-center gap-2"
             >
+              <span>儲存</span>
               匯出數據
-            </InteractiveButton>
-            <InteractiveButton
+            </button>
+            <button
               onClick={() => setShowTools(!showTools)}
-              variant="flip"
-              size="md"
-              icon={showTools ? '🔧' : '⚙️'}
-              iconPosition="left"
+              className="bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 px-6 py-3 rounded-2xl font-semibold transition-all duration-300 hover:scale-105 flex items-center gap-2"
             >
+              <span>{showTools ? '工具' : '設定'}</span>
               {showTools ? '隱藏' : '顯示'} 開發工具
-            </InteractiveButton>
+            </button>
           </div>
         )}
 
         {/* 快捷鍵提示 */}
-        <div className="text-center mt-8 fade-in-up" style={{ animationDelay: '0.6s' }}>
-          <div className="glass-card max-w-2xl mx-auto">
-            <div className="text-sm text-white/90">
-              <span className="font-bold text-lg">⌨️ 快捷鍵：</span>
-              <div className="flex flex-wrap justify-center gap-4 mt-2">
-                <span className="px-3 py-1 bg-white/10 rounded-full">Ctrl+K 搜尋</span>
-                <span className="px-3 py-1 bg-white/10 rounded-full">Ctrl+N 新增</span>
-                <span className="px-3 py-1 bg-white/10 rounded-full">Ctrl+A 全部</span>
-                <span className="px-3 py-1 bg-white/10 rounded-full">Ctrl+T 待完成</span>
-                <span className="px-3 py-1 bg-white/10 rounded-full">Ctrl+D 已完成</span>
+        <div className="text-center mt-12">
+          <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 max-w-2xl mx-auto">
+            <div className="text-sm text-gray-300">
+              <span className="font-bold text-lg text-white">快捷鍵</span>
+              <div className="flex flex-wrap justify-center gap-3 mt-4">
+                <span className="px-4 py-2 bg-white/10 rounded-xl text-xs">Ctrl+K 搜尋</span>
+                <span className="px-4 py-2 bg-white/10 rounded-xl text-xs">Ctrl+N 新增</span>
+                <span className="px-4 py-2 bg-white/10 rounded-xl text-xs">Ctrl+A 全部</span>
+                <span className="px-4 py-2 bg-white/10 rounded-xl text-xs">Ctrl+T 待完成</span>
+                <span className="px-4 py-2 bg-white/10 rounded-xl text-xs">Ctrl+D 已完成</span>
               </div>
             </div>
           </div>
@@ -530,37 +575,39 @@ const Home = ({ className }: HomeProps) => {
 
         {/* 開發工具區域 */}
         {showTools && (
-          <div className="mt-12 glass-card max-w-6xl mx-auto fade-in-up animate-scale-in">
-            <h3 className="text-2xl font-bold text-white mb-8 text-center">
-              🛠️ 開發工具展示
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div className="card-premium magnetic">
-                <h4 className="font-bold text-white mb-4 text-lg">⚡ 性能優化</h4>
-                <ul className="text-white/90 space-y-2">
-                  <li className="flex items-center gap-2">✨ 組件記憶化</li>
-                  <li className="flex items-center gap-2">🚀 懶加載</li>
-                  <li className="flex items-center gap-2">📊 虛擬列表</li>
-                  <li className="flex items-center gap-2">⏱️ 防抖節流</li>
-                </ul>
-              </div>
-              <div className="card-premium magnetic">
-                <h4 className="font-bold text-white mb-4 text-lg">🎨 現代設計</h4>
-                <ul className="text-white/90 space-y-2">
-                  <li className="flex items-center gap-2">📱 響應式設計</li>
-                  <li className="flex items-center gap-2">🌙 暗色主題</li>
-                  <li className="flex items-center gap-2">✨ 流暢動畫</li>
-                  <li className="flex items-center gap-2">♿ 無障礙支援</li>
-                </ul>
-              </div>
-              <div className="card-premium magnetic">
-                <h4 className="font-bold text-white mb-4 text-lg">🛠️ 開發體驗</h4>
-                <ul className="text-white/90 space-y-2">
-                  <li className="flex items-center gap-2">🔥 熱重載</li>
-                  <li className="flex items-center gap-2">🔍 型別檢查</li>
-                  <li className="flex items-center gap-2">🎯 自動格式化</li>
-                  <li className="flex items-center gap-2">🛡️ 錯誤邊界</li>
-                </ul>
+          <div className="mt-16">
+            <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 max-w-6xl mx-auto">
+              <h3 className="text-3xl font-bold text-white mb-12 text-center">
+                開發工具展示
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="bg-white/5 rounded-2xl p-6 border border-white/10 hover:bg-white/10 transition-all duration-300">
+                  <h4 className="font-bold text-white mb-6 text-xl">性能優化</h4>
+                  <ul className="text-gray-300 space-y-3">
+                    <li className="flex items-center gap-3">組件記憶化</li>
+                    <li className="flex items-center gap-3">懶加載</li>
+                    <li className="flex items-center gap-3">虛擬列表</li>
+                    <li className="flex items-center gap-3">防抖節流</li>
+                  </ul>
+                </div>
+                <div className="bg-white/5 rounded-2xl p-6 border border-white/10 hover:bg-white/10 transition-all duration-300">
+                  <h4 className="font-bold text-white mb-6 text-xl">現代設計</h4>
+                  <ul className="text-gray-300 space-y-3">
+                    <li className="flex items-center gap-3">響應式設計</li>
+                    <li className="flex items-center gap-3">暗色主題</li>
+                    <li className="flex items-center gap-3">流暢動畫</li>
+                    <li className="flex items-center gap-3">無障礙支援</li>
+                  </ul>
+                </div>
+                <div className="bg-white/5 rounded-2xl p-6 border border-white/10 hover:bg-white/10 transition-all duration-300">
+                  <h4 className="font-bold text-white mb-6 text-xl">開發體驗</h4>
+                  <ul className="text-gray-300 space-y-3">
+                    <li className="flex items-center gap-3">熱重載</li>
+                    <li className="flex items-center gap-3">型別檢查</li>
+                    <li className="flex items-center gap-3">自動格式化</li>
+                    <li className="flex items-center gap-3">錯誤邊界</li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>

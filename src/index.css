@@ -128,7 +128,7 @@
   }
 
   .text-shadow {
-    @apply text-shadow;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   /* 背景效果 */
@@ -154,11 +154,11 @@
   }
 
   .loading-dots > div:nth-child(2) {
-    @apply animation-delay-100;
+    animation-delay: 100ms;
   }
 
   .loading-dots > div:nth-child(3) {
-    @apply animation-delay-200;
+    animation-delay: 200ms;
   }
 }
 
@@ -218,7 +218,9 @@
   }
 
   .neon-border {
-    @apply border-2 border-transparent bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-border;
+    @apply border-2 border-transparent;
+    background: linear-gradient(white, white) padding-box, 
+                linear-gradient(to right, #22d3ee, #3b82f6, #a855f7) border-box;
   }
 
   /* 全息效果 */
@@ -338,7 +340,8 @@
 
   .flip-card-front,
   .flip-card-back {
-    @apply absolute w-full h-full backface-hidden;
+    @apply absolute w-full h-full;
+    backface-visibility: hidden;
   }
 
   .flip-card-back {

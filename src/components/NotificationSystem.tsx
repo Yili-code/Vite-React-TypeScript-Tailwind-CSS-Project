@@ -57,15 +57,15 @@ const NotificationSystem = ({
   const getNotificationIcon = (type: Notification['type']) => {
     switch (type) {
       case 'success':
-        return '✅';
+        return '';
       case 'error':
-        return '❌';
+        return '';
       case 'warning':
-        return '⚠️';
+        return '';
       case 'info':
-        return 'ℹ️';
+        return '';
       default:
-        return '📢';
+        return '';
     }
   };
 
@@ -123,7 +123,7 @@ const NotificationSystem = ({
                 onClick={() => onRemove(notification.id)}
                 className="flex-shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
               >
-                ✕
+                X
               </button>
             </div>
           </div>

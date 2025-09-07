@@ -10,22 +10,22 @@ const About = ({ className }: AboutProps) => {
     {
       title: '智能任務管理',
       description: '完整的待辦事項管理系統，支援添加、編輯、刪除、標記完成等功能，並提供實時統計。',
-      icon: '📝',
+      icon: '',
     },
     {
       title: '本地數據持久化',
       description: '使用 localStorage 自動保存您的任務數據，即使關閉瀏覽器也不會丟失。',
-      icon: '💾',
+      icon: '',
     },
     {
       title: '響應式設計',
       description: '完美適配各種設備，從手機到桌面都能提供最佳的使用體驗。',
-      icon: '📱',
+      icon: '',
     },
     {
       title: '暗色主題支援',
       description: '內建亮色和暗色主題，可根據個人喜好或系統設定自動切換。',
-      icon: '🌙',
+      icon: '',
     },
   ];
 
@@ -44,7 +44,7 @@ const About = ({ className }: AboutProps) => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12 fade-in-up">
             <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6 text-gradient">
-              📋 關於智能待辦事項管理
+              關於智能待辦事項管理
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
               一個實用的任務管理工具，結合現代前端技術，為您提供高效的工作體驗
@@ -55,9 +55,9 @@ const About = ({ className }: AboutProps) => {
           <div className="flex justify-center mb-8 fade-in-up" style={{ animationDelay: '0.1s' }}>
             <div className="bg-gray-200 dark:bg-gray-700 rounded-lg p-1">
               {[
-                { id: 'features', label: '功能特色', icon: '✨' },
-                { id: 'tech', label: '技術棧', icon: '⚙️' },
-                { id: 'usage', label: '使用指南', icon: '📖' }
+                { id: 'features', label: '功能特色', icon: '' },
+                { id: 'tech', label: '技術棧', icon: '' },
+                { id: 'usage', label: '使用指南', icon: '' }
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -133,7 +133,7 @@ const About = ({ className }: AboutProps) => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="card">
                   <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
-                    🚀 快速開始
+                    快速開始
                   </h3>
                   <ol className="space-y-3 text-gray-600 dark:text-gray-400">
                     <li className="flex items-start gap-2">
@@ -157,23 +157,23 @@ const About = ({ className }: AboutProps) => {
 
                 <div className="card">
                   <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
-                    💡 使用技巧
+                    使用技巧
                   </h3>
                   <ul className="space-y-3 text-gray-600 dark:text-gray-400">
                     <li className="flex items-start gap-2">
-                      <span className="text-success-600 dark:text-success-400">✓</span>
+                      <span className="text-success-600 dark:text-success-400"></span>
                       <span>任務會自動保存到本地儲存</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-success-600 dark:text-success-400">✓</span>
+                      <span className="text-success-600 dark:text-success-400"></span>
                       <span>支援鍵盤快捷鍵（Enter 添加任務）</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-success-600 dark:text-success-400">✓</span>
+                      <span className="text-success-600 dark:text-success-400"></span>
                       <span>可以批量清除已完成的任務</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-success-600 dark:text-success-400">✓</span>
+                      <span className="text-success-600 dark:text-success-400"></span>
                       <span>支援暗色主題，保護眼睛</span>
                     </li>
                   </ul>
@@ -195,16 +195,16 @@ const About = ({ className }: AboutProps) => {
               </p>
               <div className="flex flex-wrap justify-center gap-2">
                 <span className="px-3 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-200 rounded-full text-sm">
-                  🎯 實用性
+                  實用性
                 </span>
                 <span className="px-3 py-1 bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-200 rounded-full text-sm">
-                  ⚡ 高性能
+                  高性能
                 </span>
                 <span className="px-3 py-1 bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200 rounded-full text-sm">
-                  🛠️ 易維護
+                  易維護
                 </span>
                 <span className="px-3 py-1 bg-error-100 dark:bg-error-900/30 text-error-800 dark:text-error-200 rounded-full text-sm">
-                  🎨 美觀
+                  美觀
                 </span>
               </div>
             </div>

@@ -120,7 +120,7 @@ const TodoStats = ({ todos, showDetails = false, className }: TodoStatsProps) =>
               {Object.entries(stats.byPriority).map(([priority, count]) => (
                 <div key={priority} className="flex justify-between items-center">
                   <span className={`text-sm ${getPriorityColor(priority as keyof typeof stats.byPriority)}`}>
-                    {priority === 'high' ? '🔴 高' : priority === 'medium' ? '🟡 中' : '🟢 低'}
+                    {priority === 'high' ? '高' : priority === 'medium' ? '中' : '低'}
                   </span>
                   <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
                     {count}
