@@ -41,7 +41,6 @@
     "strictFunctionTypes": true,
     "strictBindCallApply": true,
     "strictPropertyInitialization": true,
-    "noImplicitThis": true,
     "useUnknownInCatchVariables": true,
 
     /* 其他優化 */

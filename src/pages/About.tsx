@@ -1,28 +1,31 @@
 import { BaseComponent } from '@/types';
+import { useState } from 'react';
 
 interface AboutProps extends BaseComponent {}
 
 const About = ({ className }: AboutProps) => {
+  const [activeTab, setActiveTab] = useState<'features' | 'tech' | 'usage'>('features');
+
   const features = [
     {
-      title: '技術棧',
-      description: '本專案採用現代化的前端技術棧，包括 Vite 作為建構工具、React 18 作為 UI 框架、TypeScript 提供型別安全，以及 Tailwind CSS 實現響應式設計。',
-      icon: '⚡',
+      title: '智能任務管理',
+      description: '完整的待辦事項管理系統，支援添加、編輯、刪除、標記完成等功能，並提供實時統計。',
+      icon: '📝',
     },
     {
-      title: '專案特色',
-      description: '專案整合了 React Router 實現單頁應用路由，提供流暢的頁面切換體驗。所有組件都使用 TypeScript 編寫，確保程式碼品質和開發效率。',
-      icon: '🚀',
+      title: '本地數據持久化',
+      description: '使用 localStorage 自動保存您的任務數據，即使關閉瀏覽器也不會丟失。',
+      icon: '💾',
     },
     {
-      title: '性能優化',
-      description: '採用懶加載、代碼分割、記憶化等技術優化應用性能。使用 ESLint 和 Prettier 確保代碼品質，並支援暗色主題。',
-      icon: '⚡',
+      title: '響應式設計',
+      description: '完美適配各種設備，從手機到桌面都能提供最佳的使用體驗。',
+      icon: '📱',
     },
     {
-      title: '開發體驗',
-      description: '配置了完整的開發工具鏈，包括熱重載、型別檢查、自動格式化等，提供優質的開發體驗。',
-      icon: '🛠️',
+      title: '暗色主題支援',
+      description: '內建亮色和暗色主題，可根據個人喜好或系統設定自動切換。',
+      icon: '🌙',
     },
   ];
 
@@ -37,88 +40,172 @@ const About = ({ className }: AboutProps) => {
 
   return (
     <div className={`min-h-screen bg-gradient-secondary ${className || ''}`}>
-      <div className="container mx-auto container-padding py-16">
+      <div className="container mx-auto container-padding py-8">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16 fade-in-up">
-            <h1 className="text-responsive-xl font-bold text-gray-900 dark:text-gray-100 mb-6 text-gradient">
-              關於本專案
+          <div className="text-center mb-12 fade-in-up">
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6 text-gradient">
+              📋 關於智能待辦事項管理
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
-              這是一個展示現代前端開發最佳實踐的範例專案，
-              整合了多種先進技術和開發工具，為開發者提供完整的解決方案。
+              一個實用的任務管理工具，結合現代前端技術，為您提供高效的工作體驗
             </p>
           </div>
-          
-          {/* 功能特色 */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-            {features.map((feature, index) => (
-              <div 
-                key={feature.title}
-                className="card-hover fade-in-up"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className="text-4xl mb-4 text-center">{feature.icon}</div>
-                <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3 text-center">
-                  {feature.title}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm">
-                  {feature.description}
-                </p>
-              </div>
-            ))}
-          </div>
 
-          {/* 技術棧 */}
-          <div className="card mb-16 fade-in-up" style={{ animationDelay: '0.4s' }}>
-            <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-8 text-center">
-              技術棧詳情
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {techStack.map((tech, index) => (
-                <div 
-                  key={tech.name}
-                  className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
+          {/* 標籤頁導航 */}
+          <div className="flex justify-center mb-8 fade-in-up" style={{ animationDelay: '0.1s' }}>
+            <div className="bg-gray-200 dark:bg-gray-700 rounded-lg p-1">
+              {[
+                { id: 'features', label: '功能特色', icon: '✨' },
+                { id: 'tech', label: '技術棧', icon: '⚙️' },
+                { id: 'usage', label: '使用指南', icon: '📖' }
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as any)}
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                    activeTab === tab.id
+                      ? 'bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                  }`}
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-semibold text-gray-800 dark:text-gray-200">
-                      {tech.name}
-                    </h3>
-                    <span className="text-sm text-primary-600 dark:text-primary-400 font-mono">
-                      v{tech.version}
-                    </span>
-                  </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {tech.description}
-                  </p>
-                </div>
+                  {tab.icon} {tab.label}
+                </button>
               ))}
             </div>
           </div>
-          
-          {/* 開發理念 */}
-          <div className="card text-center fade-in-up" style={{ animationDelay: '0.6s' }}>
-            <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-6">
-              開發理念
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-lg max-w-4xl mx-auto">
-              這個專案展示了如何快速建立一個現代化的 React 應用程式，
-              結合了最佳實踐和開發者體驗優化，為後續功能擴展奠定了堅實的基礎。
-              我們注重代碼品質、性能優化、可維護性和開發者體驗，
-              希望為前端開發者提供一個優秀的起點。
-            </p>
-            
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <div className="px-4 py-2 bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-200 rounded-full text-sm font-medium">
-                🎯 型別安全
+
+          {/* 功能特色標籤頁 */}
+          {activeTab === 'features' && (
+            <div className="fade-in-up" style={{ animationDelay: '0.2s' }}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                {features.map((feature, index) => (
+                  <div 
+                    key={feature.title}
+                    className="card-hover"
+                  >
+                    <div className="text-3xl mb-3">{feature.icon}</div>
+                    <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3">
+                      {feature.title}
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                      {feature.description}
+                    </p>
+                  </div>
+                ))}
               </div>
-              <div className="px-4 py-2 bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-200 rounded-full text-sm font-medium">
-                ⚡ 性能優化
+            </div>
+          )}
+
+          {/* 技術棧標籤頁 */}
+          {activeTab === 'tech' && (
+            <div className="fade-in-up" style={{ animationDelay: '0.2s' }}>
+              <div className="card mb-8">
+                <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-6 text-center">
+                  技術棧詳情
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {techStack.map((tech) => (
+                    <div 
+                      key={tech.name}
+                      className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="font-semibold text-gray-800 dark:text-gray-200">
+                          {tech.name}
+                        </h3>
+                        <span className="text-sm text-primary-600 dark:text-primary-400 font-mono">
+                          v{tech.version}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        {tech.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="px-4 py-2 bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200 rounded-full text-sm font-medium">
-                🛠️ 開發體驗
+            </div>
+          )}
+
+          {/* 使用指南標籤頁 */}
+          {activeTab === 'usage' && (
+            <div className="fade-in-up" style={{ animationDelay: '0.2s' }}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="card">
+                  <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
+                    🚀 快速開始
+                  </h3>
+                  <ol className="space-y-3 text-gray-600 dark:text-gray-400">
+                    <li className="flex items-start gap-2">
+                      <span className="bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-200 rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold">1</span>
+                      <span>在輸入框中輸入您的任務</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-200 rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold">2</span>
+                      <span>點擊「添加」按鈕或按 Enter 鍵</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-200 rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold">3</span>
+                      <span>點擊任務前的方框標記為完成</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-200 rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold">4</span>
+                      <span>使用篩選按鈕查看不同狀態的任務</span>
+                    </li>
+                  </ol>
+                </div>
+
+                <div className="card">
+                  <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
+                    💡 使用技巧
+                  </h3>
+                  <ul className="space-y-3 text-gray-600 dark:text-gray-400">
+                    <li className="flex items-start gap-2">
+                      <span className="text-success-600 dark:text-success-400">✓</span>
+                      <span>任務會自動保存到本地儲存</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-success-600 dark:text-success-400">✓</span>
+                      <span>支援鍵盤快捷鍵（Enter 添加任務）</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-success-600 dark:text-success-400">✓</span>
+                      <span>可以批量清除已完成的任務</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-success-600 dark:text-success-400">✓</span>
+                      <span>支援暗色主題，保護眼睛</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
-              <div className="px-4 py-2 bg-error-100 dark:bg-error-900/30 text-error-800 dark:text-error-200 rounded-full text-sm font-medium">
-                🎨 現代設計
+            </div>
+          )}
+
+          {/* 底部資訊 */}
+          <div className="text-center mt-12 fade-in-up" style={{ animationDelay: '0.4s' }}>
+            <div className="card max-w-2xl mx-auto">
+              <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
+                為什麼選擇這個工具？
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6">
+                這不僅僅是一個待辦事項應用，更是一個展示現代前端開發技術的完整範例。
+                它結合了最新的 React 技術、TypeScript 型別安全、Tailwind CSS 設計系統，
+                以及各種性能優化技術，為開發者提供了一個優秀的學習和參考範本。
+              </p>
+              <div className="flex flex-wrap justify-center gap-2">
+                <span className="px-3 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-200 rounded-full text-sm">
+                  🎯 實用性
+                </span>
+                <span className="px-3 py-1 bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-200 rounded-full text-sm">
+                  ⚡ 高性能
+                </span>
+                <span className="px-3 py-1 bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200 rounded-full text-sm">
+                  🛠️ 易維護
+                </span>
+                <span className="px-3 py-1 bg-error-100 dark:bg-error-900/30 text-error-800 dark:text-error-200 rounded-full text-sm">
+                  🎨 美觀
+                </span>
               </div>
             </div>
           </div>

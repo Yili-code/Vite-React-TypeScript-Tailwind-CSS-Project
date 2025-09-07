@@ -8,8 +8,6 @@ export default defineConfig({
     react({
       // 啟用 React 快速刷新
       fastRefresh: true,
-      // 啟用 JSX 轉換優化
-      jsxImportSource: '@emotion/react',
     }),
   ],
   resolve: {

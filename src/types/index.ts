@@ -4,6 +4,36 @@ export interface BaseComponent {
   children?: React.ReactNode;
 }
 
+// 待辦事項相關型別
+export interface Todo {
+  id: number;
+  text: string;
+  completed: boolean;
+  createdAt: string;
+  priority?: 'low' | 'medium' | 'high';
+  category?: string;
+  dueDate?: string;
+  updatedAt?: string;
+  tags?: string[];
+  notes?: string;
+}
+
+export interface TodoFilters {
+  status: 'all' | 'active' | 'completed';
+  priority?: 'low' | 'medium' | 'high';
+  category?: string;
+  searchQuery?: string;
+  dueDateRange?: {
+    start: string;
+    end: string;
+  };
+}
+
+export interface TodoSortOptions {
+  field: 'created' | 'priority' | 'dueDate' | 'updated' | 'text';
+  direction: 'asc' | 'desc';
+}
+
 // 主題相關型別
 export type Theme = 'light' | 'dark';
 
@@ -136,3 +166,118 @@ export type EventHandler<T = Event> = (event: T) => void;
 export type MouseEventHandler = EventHandler<React.MouseEvent>;
 export type KeyboardEventHandler = EventHandler<React.KeyboardEvent>;
 export type ChangeEventHandler = EventHandler<React.ChangeEvent<HTMLInputElement>>;
+
+// 鍵盤快捷鍵型別
+export interface KeyboardShortcut {
+  key: string;
+  ctrlKey?: boolean;
+  metaKey?: boolean;
+  shiftKey?: boolean;
+  altKey?: boolean;
+  action: () => void;
+  description: string;
+}
+
+// 統計數據型別
+export interface TodoStats {
+  total: number;
+  completed: number;
+  active: number;
+  overdue: number;
+  byPriority: {
+    high: number;
+    medium: number;
+    low: number;
+  };
+  byCategory: Record<string, number>;
+  completionRate: number;
+}
+
+// 設定相關型別
+export interface AppSettings {
+  theme: Theme;
+  language: string;
+  notifications: boolean;
+  autoSave: boolean;
+  defaultPriority: 'low' | 'medium' | 'high';
+  defaultCategory: string;
+  showCompletedTasks: boolean;
+  sortBy: 'created' | 'priority' | 'dueDate' | 'updated' | 'text';
+  sortDirection: 'asc' | 'desc';
+}
+
+// 通知相關型別
+export interface Notification {
+  id: string;
+  type: 'success' | 'error' | 'warning' | 'info';
+  title: string;
+  message: string;
+  duration?: number;
+  action?: {
+    label: string;
+    onClick: () => void;
+  };
+}
+
+// 載入狀態型別
+export interface LoadingState {
+  isLoading: boolean;
+  error?: string;
+  progress?: number;
+}
+
+// 表單驗證型別
+export interface ValidationError {
+  field: string;
+  message: string;
+}
+
+export interface FormState<T> {
+  data: T;
+  errors: ValidationError[];
+  isValid: boolean;
+  isDirty: boolean;
+  isSubmitting: boolean;
+}
+
+// 搜尋結果型別
+export interface SearchResult<T> {
+  items: T[];
+  total: number;
+  query: string;
+  filters: Record<string, any>;
+  sortBy: string;
+  page: number;
+  pageSize: number;
+}
+
+// 匯出/匯入型別
+export interface ExportData {
+  todos: Todo[];
+  settings: AppSettings;
+  version: string;
+  exportedAt: string;
+}
+
+// 性能監控型別
+export interface PerformanceMetrics {
+  fps: number;
+  memory: number;
+  renderTime: number;
+  componentCount: number;
+  reRenderCount: number;
+}
+
+// 響應式斷點型別
+export type Breakpoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+
+// 動畫型別
+export type AnimationType = 'fade-in' | 'fade-in-up' | 'slide-in-right' | 'slide-in-left' | 'scale-in' | 'bounce';
+
+export interface AnimationProps {
+  type: AnimationType;
+  delay?: number;
+  duration?: number;
+  direction?: 'normal' | 'reverse' | 'alternate' | 'alternate-reverse';
+  fillMode?: 'none' | 'forwards' | 'backwards' | 'both';
+}
