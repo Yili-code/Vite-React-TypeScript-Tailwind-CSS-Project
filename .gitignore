@@ -137,7 +137,6 @@ dist-ssr
 !.vscode/settings.json
 !.vscode/tasks.json
 .idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
@@ -151,3 +150,29 @@ Desktop.ini
 
 # Chrome debug profile
 .vscode/chrome-debug-profile
+
+# Testing
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Storybook
+storybook-static/
+
+# Temporary files
+*.tmp
+*.temp
+.DS_Store?
+Thumbs.db?
+
+# IDE specific
+.idea/
+*.swp
+*.swo
+
+# OS generated files (additional)
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes

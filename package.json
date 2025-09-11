@@ -12,15 +12,15 @@
     "modern",
     "template"
   ],
-  "author": "Your Name",
+  "author": "Yili-code",
   "license": "MIT",
-  "homepage": "https://github.com/your-username/vite-react-ts-tailwind",
+  "homepage": "https://github.com/Yili-code/Vite-React-TypeScript-Tailwind-CSS-Project",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/vite-react-ts-tailwind.git"
+    "url": "https://github.com/Yili-code/Vite-React-TypeScript-Tailwind-CSS-Project.git"
   },
   "bugs": {
-    "url": "https://github.com/your-username/vite-react-ts-tailwind/issues"
+    "url": "https://github.com/Yili-code/Vite-React-TypeScript-Tailwind-CSS-Project/issues"
   },
   "engines": {
     "node": ">=18.0.0",
@@ -28,11 +28,14 @@
   },
   "scripts": {
     "dev": "vite --mode development",
+    "dev:host": "vite --mode development --host",
     "build": "tsc && vite build --mode production",
     "build:dev": "tsc && vite build --mode development",
     "build:staging": "tsc && vite build --mode staging",
+    "build:analyze": "npm run build && vite-bundle-analyzer",
     "preview": "vite preview",
-    "preview:build": "vite preview --mode production",
+    "preview:build": "npm run build && vite preview",
+    "serve": "npm run preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --ext ts,tsx --fix",
     "lint:staged": "lint-staged",
@@ -41,14 +44,19 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "clean": "rimraf dist .tsbuildinfo",
+    "clean:all": "rimraf dist .tsbuildinfo node_modules package-lock.json",
     "analyze": "vite-bundle-analyzer",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
     "test:watch": "vitest --watch",
+    "test:run": "vitest run",
     "prepare": "husky install",
     "pre-commit": "lint-staged",
-    "pre-push": "npm run type-check && npm run lint && npm run test"
+    "pre-push": "npm run type-check && npm run lint && npm run test:run",
+    "validate": "npm run type-check && npm run lint && npm run test:run",
+    "start": "npm run dev",
+    "postinstall": "husky install"
   },
   "dependencies": {
     "react": "^18.2.0",
