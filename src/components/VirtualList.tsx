@@ -1,13 +1,12 @@
-import { BaseComponent } from '@/types';
-import React, { memo, useMemo, useRef, useState } from 'react';
+import React, { memo, useCallback, useMemo, useRef, useState } from 'react';
 
-interface VirtualListProps<T> extends BaseComponent {
+interface VirtualListProps<T> {
   items: T[];
   itemHeight: number;
   containerHeight: number;
   renderItem: (item: T, index: number) => React.ReactNode;
   overscan?: number;
-  onScroll?: (scrollTop: number) => void;
+  className?: string;
 }
 
 function VirtualList<T>({
@@ -16,8 +15,7 @@ function VirtualList<T>({
   containerHeight,
   renderItem,
   overscan = 5,
-  onScroll,
-  className,
+  className = '',
 }: VirtualListProps<T>) {
   const [scrollTop, setScrollTop] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -34,38 +32,35 @@ function VirtualList<T>({
     return items.slice(startIndex, endIndex + 1).map((item, index) => ({
       item,
       index: startIndex + index,
+      top: (startIndex + index) * itemHeight,
     }));
-  }, [items, startIndex, endIndex]);
+  }, [items, startIndex, endIndex, itemHeight]);
 
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const newScrollTop = e.currentTarget.scrollTop;
-    setScrollTop(newScrollTop);
-    onScroll?.(newScrollTop);
-  };
+  const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
+    setScrollTop(e.currentTarget.scrollTop);
+  }, []);
 
   return (
     <div
       ref={containerRef}
-      className={`overflow-auto ${className || ''}`}
+      className={`overflow-auto ${className}`}
       style={{ height: containerHeight }}
       onScroll={handleScroll}
     >
       <div style={{ height: totalHeight, position: 'relative' }}>
-        <div
-          style={{
-            transform: `translateY(${startIndex * itemHeight}px)`,
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-          }}
-        >
-          {visibleItems.map(({ item, index }) => (
-            <div key={index} style={{ height: itemHeight }}>
-              {renderItem(item, index)}
-            </div>
-          ))}
-        </div>
+        {visibleItems.map(({ item, index, top }) => (
+          <div
+            key={index}
+            style={{
+              position: 'absolute',
+              top,
+              height: itemHeight,
+              width: '100%',
+            }}
+          >
+            {renderItem(item, index)}
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -73,4 +68,4 @@ function VirtualList<T>({
 
 export default memo(VirtualList) as <T>(
   props: VirtualListProps<T>
-) => React.JSX.Element;
+) => JSX.Element;

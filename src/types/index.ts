@@ -156,19 +156,6 @@ export interface User {
   role?: 'admin' | 'user' | 'moderator';
 }
 
-// 設定相關型別
-export interface AppSettings {
-  theme: Theme;
-  language: string;
-  notifications: boolean;
-  autoSave: boolean;
-  defaultPriority: 'low' | 'medium' | 'high';
-  defaultCategory: string;
-  showCompletedTasks: boolean;
-  sortBy: 'created' | 'priority' | 'dueDate' | 'updated' | 'text';
-  sortDirection: 'asc' | 'desc';
-}
-
 // 工具函數型別
 export type DebounceFunction<T extends (...args: unknown[]) => unknown> = (
   ...args: Parameters<T>
@@ -239,13 +226,6 @@ export interface Notification {
     label: string;
     onClick: () => void;
   };
-}
-
-// 載入狀態型別
-export interface LoadingState {
-  isLoading: boolean;
-  error?: string;
-  progress?: number;
 }
 
 // 表單驗證型別

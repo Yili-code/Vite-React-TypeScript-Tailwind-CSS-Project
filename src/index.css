@@ -8,7 +8,7 @@
     font-family: 'Inter', system-ui, sans-serif;
     scroll-behavior: smooth;
   }
-  
+
   body {
     @apply bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300;
     line-height: 1.6;
@@ -49,15 +49,15 @@
 }
 
 @layer components {
-  /* 按鈕組件 */
+  /* 按鈕組件 - 優化版本 */
   .btn {
     @apply inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
   }
-  
+
   .btn-primary {
     @apply btn bg-primary-600 hover:bg-primary-700 text-white focus:ring-primary-500 dark:bg-primary-500 dark:hover:bg-primary-600;
   }
-  
+
   .btn-secondary {
     @apply btn bg-secondary-200 hover:bg-secondary-300 text-secondary-800 focus:ring-secondary-500 dark:bg-secondary-700 dark:hover:bg-secondary-600 dark:text-secondary-200;
   }
@@ -73,8 +73,8 @@
   .btn-error {
     @apply btn bg-error-600 hover:bg-error-700 text-white focus:ring-error-500 dark:bg-error-500 dark:hover:bg-error-600;
   }
-  
-  /* 卡片組件 */
+
+  /* 卡片組件 - 優化版本 */
   .card {
     @apply bg-white dark:bg-gray-800 rounded-xl shadow-soft border border-gray-200 dark:border-gray-700 p-6 transition-all duration-300 hover:shadow-medium;
   }
@@ -83,7 +83,7 @@
     @apply card hover:scale-105 hover:shadow-hard;
   }
 
-  /* 輸入框組件 */
+  /* 輸入框組件 - 優化版本 */
   .input {
     @apply block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white transition-colors duration-200;
   }
@@ -219,16 +219,18 @@
 
   .neon-border {
     @apply border-2 border-transparent;
-    background: linear-gradient(white, white) padding-box, 
-                linear-gradient(to right, #22d3ee, #3b82f6, #a855f7) border-box;
+    background:
+      linear-gradient(white, white) padding-box,
+      linear-gradient(to right, #22d3ee, #3b82f6, #a855f7) border-box;
   }
 
   /* 全息效果 */
   .hologram {
     @apply animate-hologram;
-    background: linear-gradient(45deg, 
-      rgba(0, 255, 255, 0.1), 
-      rgba(255, 0, 255, 0.1), 
+    background: linear-gradient(
+      45deg,
+      rgba(0, 255, 255, 0.1),
+      rgba(255, 0, 255, 0.1),
       rgba(0, 255, 0, 0.1)
     );
   }
@@ -266,11 +268,27 @@
   .particles::after {
     content: '';
     @apply absolute inset-0 pointer-events-none;
-    background-image: 
-      radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.3), transparent),
-      radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.2), transparent),
-      radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.4), transparent),
-      radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.3), transparent);
+    background-image:
+      radial-gradient(
+        2px 2px at 20px 30px,
+        rgba(255, 255, 255, 0.3),
+        transparent
+      ),
+      radial-gradient(
+        2px 2px at 40px 70px,
+        rgba(255, 255, 255, 0.2),
+        transparent
+      ),
+      radial-gradient(
+        1px 1px at 90px 40px,
+        rgba(255, 255, 255, 0.4),
+        transparent
+      ),
+      radial-gradient(
+        1px 1px at 130px 80px,
+        rgba(255, 255, 255, 0.3),
+        transparent
+      );
     background-repeat: repeat;
     background-size: 200px 200px;
     animation: matrix 20s linear infinite;
@@ -360,8 +378,13 @@
   }
 
   @keyframes wave {
-    0%, 100% { transform: translateX(-100%); }
-    50% { transform: translateX(100%); }
+    0%,
+    100% {
+      transform: translateX(-100%);
+    }
+    50% {
+      transform: translateX(100%);
+    }
   }
 
   /* 發光邊框 */
@@ -373,7 +396,9 @@
     content: '';
     @apply absolute inset-0 rounded-lg bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 opacity-0 transition-opacity duration-300;
     padding: 2px;
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
     mask-composite: exclude;
   }
 

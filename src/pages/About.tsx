@@ -1,9 +1,10 @@
+import { Icons } from '@/components';
 import { BaseComponent } from '@/types';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 
 interface AboutProps extends BaseComponent {}
 
-const About = ({ className }: AboutProps) => {
+const About = memo(({ className }: AboutProps) => {
   const [activeTab, setActiveTab] = useState<'features' | 'tech' | 'usage'>(
     'features'
   );
@@ -13,33 +14,63 @@ const About = ({ className }: AboutProps) => {
       title: '智能任務管理',
       description:
         '完整的待辦事項管理系統，支援添加、編輯、刪除、標記完成等功能，並提供實時統計。',
-      icon: '',
+      icon: Icons.SmartIcon,
     },
     {
       title: '本地數據持久化',
       description:
         '使用 localStorage 自動保存您的任務數據，即使關閉瀏覽器也不會丟失。',
-      icon: '',
+      icon: Icons.StorageIcon,
     },
     {
       title: '響應式設計',
       description: '完美適配各種設備，從手機到桌面都能提供最佳的使用體驗。',
-      icon: '',
+      icon: Icons.ResponsiveIcon,
     },
     {
       title: '暗色主題支援',
       description: '內建亮色和暗色主題，可根據個人喜好或系統設定自動切換。',
-      icon: '',
+      icon: Icons.ThemeIcon,
     },
   ];
 
   const techStack = [
-    { name: 'Vite', version: '5.0.0', description: '快速建構工具' },
-    { name: 'React', version: '18.2.0', description: 'UI 框架' },
-    { name: 'TypeScript', version: '5.3.2', description: '型別安全' },
-    { name: 'Tailwind CSS', version: '3.3.6', description: 'CSS 框架' },
-    { name: 'React Router', version: '6.20.1', description: '路由管理' },
-    { name: 'ESLint', version: '8.54.0', description: '代碼檢查' },
+    {
+      name: 'Vite',
+      version: '5.0.0',
+      description: '快速建構工具',
+      icon: Icons.ViteIcon,
+    },
+    {
+      name: 'React',
+      version: '18.2.0',
+      description: 'UI 框架',
+      icon: Icons.ReactIcon,
+    },
+    {
+      name: 'TypeScript',
+      version: '5.3.2',
+      description: '型別安全',
+      icon: Icons.TypeScriptIcon,
+    },
+    {
+      name: 'Tailwind CSS',
+      version: '3.3.6',
+      description: 'CSS 框架',
+      icon: Icons.TailwindIcon,
+    },
+    {
+      name: 'React Router',
+      version: '6.20.1',
+      description: '路由管理',
+      icon: Icons.RouterIcon,
+    },
+    {
+      name: 'ESLint',
+      version: '8.54.0',
+      description: '代碼檢查',
+      icon: Icons.ESLintIcon,
+    },
   ];
 
   return (
@@ -62,9 +93,9 @@ const About = ({ className }: AboutProps) => {
           >
             <div className='bg-gray-200 dark:bg-gray-700 rounded-lg p-1'>
               {[
-                { id: 'features', label: '功能特色', icon: '' },
-                { id: 'tech', label: '技術棧', icon: '' },
-                { id: 'usage', label: '使用指南', icon: '' },
+                { id: 'features', label: '功能特色', icon: Icons.SmartIcon },
+                { id: 'tech', label: '技術棧', icon: Icons.SettingsIcon },
+                { id: 'usage', label: '使用指南', icon: Icons.InfoIcon },
               ].map(tab => (
                 <button
                   key={tab.id}
@@ -75,7 +106,8 @@ const About = ({ className }: AboutProps) => {
                       : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
                   }`}
                 >
-                  {tab.icon} {tab.label}
+                  <tab.icon className='w-4 h-4 mr-2' />
+                  {tab.label}
                 </button>
               ))}
             </div>
@@ -87,7 +119,9 @@ const About = ({ className }: AboutProps) => {
               <div className='grid grid-cols-1 md:grid-cols-2 gap-6 mb-8'>
                 {features.map(feature => (
                   <div key={feature.title} className='card-hover'>
-                    <div className='text-3xl mb-3'>{feature.icon}</div>
+                    <div className='text-3xl mb-3 text-primary-600 dark:text-primary-400'>
+                      <feature.icon className='w-8 h-8' />
+                    </div>
                     <h3 className='text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3'>
                       {feature.title}
                     </h3>
@@ -114,9 +148,12 @@ const About = ({ className }: AboutProps) => {
                       className='p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200'
                     >
                       <div className='flex items-center justify-between mb-2'>
-                        <h3 className='font-semibold text-gray-800 dark:text-gray-200'>
-                          {tech.name}
-                        </h3>
+                        <div className='flex items-center gap-2'>
+                          <tech.icon className='w-5 h-5 text-primary-600 dark:text-primary-400' />
+                          <h3 className='font-semibold text-gray-800 dark:text-gray-200'>
+                            {tech.name}
+                          </h3>
+                        </div>
                         <span className='text-sm text-primary-600 dark:text-primary-400 font-mono'>
                           v{tech.version}
                         </span>
@@ -173,19 +210,19 @@ const About = ({ className }: AboutProps) => {
                   </h3>
                   <ul className='space-y-3 text-gray-600 dark:text-gray-400'>
                     <li className='flex items-start gap-2'>
-                      <span className='text-success-600 dark:text-success-400'></span>
+                      <Icons.StorageIcon className='w-4 h-4 text-success-600 dark:text-success-400 mt-0.5 flex-shrink-0' />
                       <span>任務會自動保存到本地儲存</span>
                     </li>
                     <li className='flex items-start gap-2'>
-                      <span className='text-success-600 dark:text-success-400'></span>
+                      <Icons.SettingsIcon className='w-4 h-4 text-success-600 dark:text-success-400 mt-0.5 flex-shrink-0' />
                       <span>支援鍵盤快捷鍵（Enter 添加任務）</span>
                     </li>
                     <li className='flex items-start gap-2'>
-                      <span className='text-success-600 dark:text-success-400'></span>
+                      <Icons.CleanIcon className='w-4 h-4 text-success-600 dark:text-success-400 mt-0.5 flex-shrink-0' />
                       <span>可以批量清除已完成的任務</span>
                     </li>
                     <li className='flex items-start gap-2'>
-                      <span className='text-success-600 dark:text-success-400'></span>
+                      <Icons.ThemeIcon className='w-4 h-4 text-success-600 dark:text-success-400 mt-0.5 flex-shrink-0' />
                       <span>支援暗色主題，保護眼睛</span>
                     </li>
                   </ul>
@@ -229,6 +266,8 @@ const About = ({ className }: AboutProps) => {
       </div>
     </div>
   );
-};
+});
+
+About.displayName = 'About';
 
 export default About;

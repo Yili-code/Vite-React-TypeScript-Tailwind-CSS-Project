@@ -40,15 +40,35 @@ export default defineConfig(({ command, mode }) => {
       // 優化建構大小
       rollupOptions: {
         output: {
-          manualChunks: {
+          manualChunks: id => {
             // 核心 React 庫
-            'react-vendor': ['react', 'react-dom'],
+            if (id.includes('react') || id.includes('react-dom')) {
+              return 'react-vendor';
+            }
             // 路由庫
-            'router-vendor': ['react-router-dom'],
+            if (id.includes('react-router')) {
+              return 'router-vendor';
+            }
             // 錯誤邊界
-            'error-vendor': ['react-error-boundary'],
+            if (id.includes('react-error-boundary')) {
+              return 'error-vendor';
+            }
             // 工具庫
-            'utils-vendor': [],
+            if (id.includes('node_modules')) {
+              return 'vendor';
+            }
+            // 組件庫
+            if (id.includes('src/components')) {
+              return 'components';
+            }
+            // Hooks
+            if (id.includes('src/hooks')) {
+              return 'hooks';
+            }
+            // 頁面
+            if (id.includes('src/pages')) {
+              return 'pages';
+            }
           },
           // 優化檔案命名
           chunkFileNames: 'assets/js/[name]-[hash].js',
@@ -57,6 +77,10 @@ export default defineConfig(({ command, mode }) => {
         },
         // 外部依賴（如果使用 CDN）
         external: [],
+        // 優化 tree shaking
+        treeshake: {
+          moduleSideEffects: false,
+        },
       },
       // 優化 chunk 大小警告閾值
       chunkSizeWarningLimit: 1000,
@@ -66,6 +90,8 @@ export default defineConfig(({ command, mode }) => {
       commonjsOptions: {
         include: [/node_modules/],
       },
+      // 優化建構性能
+      reportCompressedSize: false,
     },
     server: {
       // 開發伺服器配置

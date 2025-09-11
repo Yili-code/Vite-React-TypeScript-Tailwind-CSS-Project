@@ -1,58 +1,55 @@
-import { BaseComponent } from '@/types';
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 
-interface InfiniteScrollProps extends BaseComponent {
+interface InfiniteScrollProps {
   hasMore: boolean;
-  loadMore: () => void;
+  isLoading: boolean;
+  onLoadMore: () => void;
   threshold?: number;
   rootMargin?: string;
   children: React.ReactNode;
+  className?: string;
   loadingComponent?: React.ReactNode;
   endComponent?: React.ReactNode;
 }
 
-const InfiniteScroll = memo<InfiniteScrollProps>(
+const InfiniteScroll: React.FC<InfiniteScrollProps> = memo(
   ({
     hasMore,
-    loadMore,
+    isLoading,
+    onLoadMore,
     threshold = 0.1,
     rootMargin = '100px',
     children,
+    className = '',
     loadingComponent,
     endComponent,
-    className,
   }) => {
-    const [isLoading, setIsLoading] = useState(false);
-    const observerRef = useRef<IntersectionObserver | null>(null);
+    const [, setIsIntersecting] = useState(false);
     const sentinelRef = useRef<HTMLDivElement>(null);
+    const observerRef = useRef<IntersectionObserver | null>(null);
 
-    const handleLoadMore = useCallback(async () => {
-      if (isLoading || !hasMore) return;
+    const handleIntersection = useCallback(
+      (entries: IntersectionObserverEntry[]) => {
+        const [entry] = entries;
+        if (!entry) return;
 
-      setIsLoading(true);
-      try {
-        await loadMore();
-      } finally {
-        setIsLoading(false);
-      }
-    }, [isLoading, hasMore, loadMore]);
+        setIsIntersecting(entry.isIntersecting);
+
+        if (entry.isIntersecting && hasMore && !isLoading) {
+          onLoadMore();
+        }
+      },
+      [hasMore, isLoading, onLoadMore]
+    );
 
     useEffect(() => {
       const sentinel = sentinelRef.current;
       if (!sentinel) return;
 
-      observerRef.current = new IntersectionObserver(
-        entries => {
-          const [entry] = entries;
-          if (entry?.isIntersecting && hasMore && !isLoading) {
-            handleLoadMore();
-          }
-        },
-        {
-          threshold,
-          rootMargin,
-        }
-      );
+      observerRef.current = new IntersectionObserver(handleIntersection, {
+        threshold,
+        rootMargin,
+      });
 
       observerRef.current.observe(sentinel);
 
@@ -61,18 +58,18 @@ const InfiniteScroll = memo<InfiniteScrollProps>(
           observerRef.current.disconnect();
         }
       };
-    }, [hasMore, isLoading, handleLoadMore, threshold, rootMargin]);
+    }, [handleIntersection, threshold, rootMargin]);
 
     const defaultLoadingComponent = (
       <div className='flex justify-center items-center py-8'>
-        <div className='loading-spinner w-6 h-6'></div>
+        <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600'></div>
         <span className='ml-2 text-gray-600 dark:text-gray-400'>載入中...</span>
       </div>
     );
 
     const defaultEndComponent = (
       <div className='flex justify-center items-center py-8'>
-        <span className='text-gray-500 dark:text-gray-400'>已載入全部內容</span>
+        <span className='text-gray-500 dark:text-gray-400'>沒有更多內容了</span>
       </div>
     );
 
@@ -80,13 +77,13 @@ const InfiniteScroll = memo<InfiniteScrollProps>(
       <div className={className}>
         {children}
 
-        {hasMore ? (
+        {hasMore && (
           <div ref={sentinelRef}>
             {isLoading && (loadingComponent || defaultLoadingComponent)}
           </div>
-        ) : (
-          endComponent || defaultEndComponent
         )}
+
+        {!hasMore && !isLoading && (endComponent || defaultEndComponent)}
       </div>
     );
   }

@@ -1,142 +1,180 @@
-import { BaseComponent } from '@/types';
-import { useEffect, useState } from 'react';
+import React, { memo, useCallback, useEffect, useRef } from 'react';
 
-interface AnimatedBackgroundProps extends BaseComponent {
-  type?: 'particles' | 'waves' | 'geometric' | 'matrix' | 'hologram';
-  intensity?: 'low' | 'medium' | 'high';
-  color?: 'primary' | 'accent' | 'rainbow' | 'monochrome';
+interface Particle {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  size: number;
+  opacity: number;
+  color: string;
 }
 
-const AnimatedBackground = ({ 
-  type = 'particles', 
-  intensity = 'medium',
-  color = 'primary',
-  className = ''
-}: AnimatedBackgroundProps) => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+interface AnimatedBackgroundProps {
+  particleCount?: number;
+  colors?: string[];
+  speed?: number;
+  className?: string;
+}
 
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth) * 100,
-        y: (e.clientY / window.innerHeight) * 100,
+const AnimatedBackground: React.FC<AnimatedBackgroundProps> = memo(
+  ({
+    particleCount = 50,
+    colors = ['#3B82F6', '#8B5CF6', '#EC4899', '#10B981'],
+    speed = 0.5,
+    className = '',
+  }) => {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const animationRef = useRef<number>();
+    const particlesRef = useRef<Particle[]>([]);
+    const lastTimeRef = useRef<number>(0);
+
+    const createParticle = useCallback((): Particle => {
+      const canvas = canvasRef.current;
+      if (!canvas) {
+        return {
+          x: 0,
+          y: 0,
+          vx: 0,
+          vy: 0,
+          size: 0,
+          opacity: 0,
+          color: colors[0] || '#3B82F6',
+        };
+      }
+
+      return {
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * speed,
+        vy: (Math.random() - 0.5) * speed,
+        size: Math.random() * 3 + 1,
+        opacity: Math.random() * 0.5 + 0.2,
+        color:
+          colors[Math.floor(Math.random() * colors.length)] ||
+          colors[0] ||
+          '#3B82F6',
+      };
+    }, [colors, speed]);
+
+    const initParticles = useCallback(() => {
+      particlesRef.current = Array.from(
+        { length: particleCount },
+        createParticle
+      );
+    }, [particleCount, createParticle]);
+
+    const updateParticles = useCallback((deltaTime: number) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+
+      particlesRef.current.forEach(particle => {
+        particle.x += particle.vx * deltaTime;
+        particle.y += particle.vy * deltaTime;
+
+        // 邊界檢查
+        if (particle.x < 0 || particle.x > canvas.width) {
+          particle.vx *= -1;
+          particle.x = Math.max(0, Math.min(canvas.width, particle.x));
+        }
+        if (particle.y < 0 || particle.y > canvas.height) {
+          particle.vy *= -1;
+          particle.y = Math.max(0, Math.min(canvas.height, particle.y));
+        }
       });
-    };
+    }, []);
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+    const drawParticles = useCallback(() => {
+      const canvas = canvasRef.current;
+      const ctx = canvas?.getContext('2d');
+      if (!canvas || !ctx) return;
 
-  const getIntensityClass = () => {
-    switch (intensity) {
-      case 'low': return 'opacity-20';
-      case 'medium': return 'opacity-40';
-      case 'high': return 'opacity-60';
-      default: return 'opacity-40';
-    }
-  };
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  const getColorClass = () => {
-    switch (color) {
-      case 'primary': return 'from-primary-400 via-primary-500 to-primary-600';
-      case 'accent': return 'from-accent-400 via-accent-500 to-accent-600';
-      case 'rainbow': return 'from-cyan-400 via-blue-500 to-purple-600';
-      case 'monochrome': return 'from-gray-400 via-gray-500 to-gray-600';
-      default: return 'from-primary-400 via-primary-500 to-primary-600';
-    }
-  };
+      particlesRef.current.forEach(particle => {
+        ctx.save();
+        ctx.globalAlpha = particle.opacity;
+        ctx.fillStyle = particle.color;
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
 
-  const renderParticles = () => (
-    <div className={`absolute inset-0 ${getIntensityClass()}`}>
-      {Array.from({ length: 50 }).map((_, i) => (
-        <div
-          key={i}
-          className={`absolute w-1 h-1 bg-gradient-to-r ${getColorClass()} rounded-full animate-float`}
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            animationDelay: `${Math.random() * 3}s`,
-            animationDuration: `${3 + Math.random() * 4}s`,
-          }}
-        />
-      ))}
-    </div>
-  );
+      // 繪製連線
+      particlesRef.current.forEach((particle, i) => {
+        particlesRef.current.slice(i + 1).forEach(otherParticle => {
+          const dx = particle.x - otherParticle.x;
+          const dy = particle.y - otherParticle.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
 
-  const renderWaves = () => (
-    <div className={`absolute inset-0 ${getIntensityClass()}`}>
-      <div className="wave absolute top-0 left-0 w-full h-1/3 bg-gradient-to-r from-cyan-400/30 via-blue-500/30 to-purple-600/30" />
-      <div className="wave absolute top-1/3 left-0 w-full h-1/3 bg-gradient-to-r from-purple-400/20 via-pink-500/20 to-red-500/20" style={{ animationDelay: '1s' }} />
-      <div className="wave absolute top-2/3 left-0 w-full h-1/3 bg-gradient-to-r from-green-400/20 via-yellow-500/20 to-orange-500/20" style={{ animationDelay: '2s' }} />
-    </div>
-  );
+          if (distance < 100) {
+            ctx.save();
+            ctx.globalAlpha = ((100 - distance) / 100) * 0.2;
+            ctx.strokeStyle = particle.color;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(particle.x, particle.y);
+            ctx.lineTo(otherParticle.x, otherParticle.y);
+            ctx.stroke();
+            ctx.restore();
+          }
+        });
+      });
+    }, []);
 
-  const renderGeometric = () => (
-    <div className={`absolute inset-0 ${getIntensityClass()}`}>
-      {Array.from({ length: 20 }).map((_, i) => (
-        <div
-          key={i}
-          className={`absolute w-16 h-16 border-2 border-gradient-to-r ${getColorClass()} rounded-lg animate-rotate-in`}
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            animationDelay: `${Math.random() * 2}s`,
-            transform: `rotate(${Math.random() * 360}deg)`,
-          }}
-        />
-      ))}
-    </div>
-  );
+    const animate = useCallback(
+      (currentTime: number) => {
+        const deltaTime = currentTime - lastTimeRef.current;
+        lastTimeRef.current = currentTime;
 
-  const renderMatrix = () => (
-    <div className={`absolute inset-0 ${getIntensityClass()}`}>
-      {Array.from({ length: 30 }).map((_, i) => (
-        <div
-          key={i}
-          className="absolute text-green-400 font-mono text-xs animate-matrix"
-          style={{
-            left: `${Math.random() * 100}%`,
-            animationDelay: `${Math.random() * 5}s`,
-            animationDuration: `${10 + Math.random() * 10}s`,
-          }}
-        >
-          {Array.from({ length: 20 }).map((_, j) => (
-            <div key={j} className="opacity-70">
-              {String.fromCharCode(0x30A0 + Math.random() * 96)}
-            </div>
-          ))}
-        </div>
-      ))}
-    </div>
-  );
+        updateParticles(deltaTime);
+        drawParticles();
 
-  const renderHologram = () => (
-    <div className={`absolute inset-0 hologram ${getIntensityClass()}`}>
-      <div 
-        className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 via-blue-500/10 to-purple-600/10"
-        style={{
-          transform: `perspective(1000px) rotateX(${mousePosition.y * 0.1}deg) rotateY(${mousePosition.x * 0.1}deg)`,
-        }}
+        animationRef.current = requestAnimationFrame(animate);
+      },
+      [updateParticles, drawParticles]
+    );
+
+    const handleResize = useCallback(() => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+
+      initParticles();
+    }, [initParticles]);
+
+    useEffect(() => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+
+      handleResize();
+      lastTimeRef.current = performance.now();
+      animationRef.current = requestAnimationFrame(animate);
+
+      window.addEventListener('resize', handleResize);
+
+      return () => {
+        if (animationRef.current) {
+          cancelAnimationFrame(animationRef.current);
+        }
+        window.removeEventListener('resize', handleResize);
+      };
+    }, [animate, handleResize]);
+
+    return (
+      <canvas
+        ref={canvasRef}
+        className={`absolute inset-0 w-full h-full ${className}`}
+        style={{ background: 'transparent' }}
       />
-    </div>
-  );
+    );
+  }
+);
 
-  const renderBackground = () => {
-    switch (type) {
-      case 'particles': return renderParticles();
-      case 'waves': return renderWaves();
-      case 'geometric': return renderGeometric();
-      case 'matrix': return renderMatrix();
-      case 'hologram': return renderHologram();
-      default: return renderParticles();
-    }
-  };
-
-  return (
-    <div className={`fixed inset-0 pointer-events-none overflow-hidden ${className}`}>
-      {renderBackground()}
-    </div>
-  );
-};
+AnimatedBackground.displayName = 'AnimatedBackground';
 
 export default AnimatedBackground;
