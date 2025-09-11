@@ -29,17 +29,17 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = memo(
     };
 
     const colorClasses = {
-      primary: 'text-primary-600',
-      success: 'text-success-600',
-      warning: 'text-warning-600',
-      error: 'text-error-600',
+      primary: 'text-blue-600',
+      success: 'text-green-600',
+      warning: 'text-yellow-600',
+      error: 'text-red-600',
     };
 
     const bgColorClasses = {
-      primary: 'bg-primary-100 dark:bg-primary-900/20',
-      success: 'bg-success-100 dark:bg-success-900/20',
-      warning: 'bg-warning-100 dark:bg-warning-900/20',
-      error: 'bg-error-100 dark:bg-error-900/20',
+      primary: 'bg-blue-100 dark:bg-blue-900/20',
+      success: 'bg-green-100 dark:bg-green-900/20',
+      warning: 'bg-yellow-100 dark:bg-yellow-900/20',
+      error: 'bg-red-100 dark:bg-red-900/20',
     };
 
     const animateProgress = useCallback(() => {

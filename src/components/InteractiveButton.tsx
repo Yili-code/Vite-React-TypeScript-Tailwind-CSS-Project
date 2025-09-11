@@ -40,15 +40,15 @@ const InteractiveButton: React.FC<InteractiveButtonProps> = memo(
 
     const variantClasses = {
       primary:
-        'bg-primary-600 hover:bg-primary-700 text-white focus:ring-primary-500 dark:bg-primary-500 dark:hover:bg-primary-600',
+        'bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-500 dark:bg-blue-500 dark:hover:bg-blue-600',
       secondary:
-        'bg-secondary-200 hover:bg-secondary-300 text-secondary-800 focus:ring-secondary-500 dark:bg-secondary-700 dark:hover:bg-secondary-600 dark:text-secondary-200',
+        'bg-gray-200 hover:bg-gray-300 text-gray-800 focus:ring-gray-500 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200',
       success:
-        'bg-success-600 hover:bg-success-700 text-white focus:ring-success-500 dark:bg-success-500 dark:hover:bg-success-600',
+        'bg-green-600 hover:bg-green-700 text-white focus:ring-green-500 dark:bg-green-500 dark:hover:bg-green-600',
       warning:
-        'bg-warning-600 hover:bg-warning-700 text-white focus:ring-warning-500 dark:bg-warning-500 dark:hover:bg-warning-600',
+        'bg-yellow-600 hover:bg-yellow-700 text-white focus:ring-yellow-500 dark:bg-yellow-500 dark:hover:bg-yellow-600',
       error:
-        'bg-error-600 hover:bg-error-700 text-white focus:ring-error-500 dark:bg-error-500 dark:hover:bg-error-600',
+        'bg-red-600 hover:bg-red-700 text-white focus:ring-red-500 dark:bg-red-500 dark:hover:bg-red-600',
       ghost:
         'bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 focus:ring-gray-500',
     };

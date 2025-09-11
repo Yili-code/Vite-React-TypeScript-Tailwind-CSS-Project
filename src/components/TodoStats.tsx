@@ -132,7 +132,7 @@ const TodoStats: React.FC<TodoStatsProps> = memo(
             <h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>
               完成進度
             </h3>
-            <div className='text-2xl font-bold text-primary-600'>
+            <div className='text-2xl font-bold text-blue-600'>
               <Counter value={stats.completionRate} suffix='%' />
             </div>
           </div>
@@ -252,11 +252,11 @@ const TodoStats: React.FC<TodoStatsProps> = memo(
                     <div className='flex items-center gap-2'>
                       <div className='w-16 bg-gray-200 dark:bg-gray-600 rounded-full h-2'>
                         <div
-                          className='h-2 bg-primary-500 rounded-full transition-all duration-1000'
+                          className='h-2 bg-blue-500 rounded-full transition-all duration-1000'
                           style={{ width: `${percentage}%` }}
                         />
                       </div>
-                      <span className='text-sm font-semibold text-primary-600 w-6 text-right'>
+                      <span className='text-sm font-semibold text-blue-600 w-6 text-right'>
                         <Counter value={count} />
                       </span>
                     </div>

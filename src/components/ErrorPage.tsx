@@ -17,7 +17,7 @@ const ErrorPage = ({
     <div className={`min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 ${className || ''}`}>
       <div className="card max-w-md mx-auto text-center">
         <div className="mb-6">
-          <div className="text-6xl font-bold text-primary-600 dark:text-primary-400 mb-4">
+          <div className="text-6xl font-bold text-blue-600 dark:text-blue-400 mb-4">
             404
           </div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">

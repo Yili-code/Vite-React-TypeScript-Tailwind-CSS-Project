@@ -8,9 +8,10 @@ import { ErrorBoundary } from 'react-error-boundary';
 import {
   Link,
   Route,
-  BrowserRouter as Router,
   Routes,
   useLocation,
+  createBrowserRouter,
+  RouterProvider,
 } from 'react-router-dom';
 
 // 懶加載組件
@@ -33,7 +34,7 @@ function ErrorFallback({
   return (
     <div className='min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900'>
       <div className='card max-w-md mx-auto text-center'>
-        <h2 className='text-2xl font-bold text-error-600 dark:text-error-400 mb-4'>
+        <h2 className='text-2xl font-bold text-red-600 dark:text-red-400 mb-4'>
           發生錯誤
         </h2>
         <p className='text-gray-600 dark:text-gray-400 mb-6'>
@@ -61,7 +62,7 @@ const Navigation = () => {
         <div className='flex justify-between items-center h-16'>
           <Link
             to='/'
-            className='text-2xl font-bold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors duration-200'
+            className='text-2xl font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-200'
           >
             React App
           </Link>
@@ -101,6 +102,37 @@ const Navigation = () => {
   );
 };
 
+// 創建路由配置
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: (
+      <div className='min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300'>
+        <Navigation />
+        <main>
+          <Suspense
+            fallback={
+              <div className='min-h-screen flex items-center justify-center'>
+                <div className='loading-spinner w-8 h-8'></div>
+              </div>
+            }
+          >
+            <Routes>
+              <Route path='/' element={<Home />} />
+              <Route path='/about' element={<About />} />
+              <Route path='*' element={<ErrorPage />} />
+            </Routes>
+          </Suspense>
+        </main>
+      </div>
+    ),
+  },
+], {
+  future: {
+    v7_relativeSplatPath: true,
+  },
+});
+
 const App = () => {
   return (
     <ErrorBoundary
@@ -109,26 +141,7 @@ const App = () => {
         console.error('應用程式錯誤:', error, errorInfo);
       }}
     >
-      <Router>
-        <div className='min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300'>
-          <Navigation />
-          <main>
-            <Suspense
-              fallback={
-                <div className='min-h-screen flex items-center justify-center'>
-                  <div className='loading-spinner w-8 h-8'></div>
-                </div>
-              }
-            >
-              <Routes>
-                <Route path='/' element={<Home />} />
-                <Route path='/about' element={<About />} />
-                <Route path='*' element={<ErrorPage />} />
-              </Routes>
-            </Suspense>
-          </main>
-        </div>
-      </Router>
+      <RouterProvider router={router} />
     </ErrorBoundary>
   );
 };

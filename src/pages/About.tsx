@@ -119,7 +119,7 @@ const About = memo(({ className }: AboutProps) => {
               <div className='grid grid-cols-1 md:grid-cols-2 gap-6 mb-8'>
                 {features.map(feature => (
                   <div key={feature.title} className='card-hover'>
-                    <div className='text-3xl mb-3 text-primary-600 dark:text-primary-400'>
+                    <div className='text-3xl mb-3 text-blue-600 dark:text-blue-400'>
                       <feature.icon className='w-8 h-8' />
                     </div>
                     <h3 className='text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3'>
@@ -149,12 +149,12 @@ const About = memo(({ className }: AboutProps) => {
                     >
                       <div className='flex items-center justify-between mb-2'>
                         <div className='flex items-center gap-2'>
-                          <tech.icon className='w-5 h-5 text-primary-600 dark:text-primary-400' />
+                          <tech.icon className='w-5 h-5 text-blue-600 dark:text-blue-400' />
                           <h3 className='font-semibold text-gray-800 dark:text-gray-200'>
                             {tech.name}
                           </h3>
                         </div>
-                        <span className='text-sm text-primary-600 dark:text-primary-400 font-mono'>
+                        <span className='text-sm text-blue-600 dark:text-blue-400 font-mono'>
                           v{tech.version}
                         </span>
                       </div>
@@ -178,25 +178,25 @@ const About = memo(({ className }: AboutProps) => {
                   </h3>
                   <ol className='space-y-3 text-gray-600 dark:text-gray-400'>
                     <li className='flex items-start gap-2'>
-                      <span className='bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-200 rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold'>
+                      <span className='bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold'>
                         1
                       </span>
                       <span>在輸入框中輸入您的任務</span>
                     </li>
                     <li className='flex items-start gap-2'>
-                      <span className='bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-200 rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold'>
+                      <span className='bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold'>
                         2
                       </span>
                       <span>點擊「添加」按鈕或按 Enter 鍵</span>
                     </li>
                     <li className='flex items-start gap-2'>
-                      <span className='bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-200 rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold'>
+                      <span className='bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold'>
                         3
                       </span>
                       <span>點擊任務前的方框標記為完成</span>
                     </li>
                     <li className='flex items-start gap-2'>
-                      <span className='bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-200 rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold'>
+                      <span className='bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold'>
                         4
                       </span>
                       <span>使用篩選按鈕查看不同狀態的任務</span>
@@ -210,19 +210,19 @@ const About = memo(({ className }: AboutProps) => {
                   </h3>
                   <ul className='space-y-3 text-gray-600 dark:text-gray-400'>
                     <li className='flex items-start gap-2'>
-                      <Icons.StorageIcon className='w-4 h-4 text-success-600 dark:text-success-400 mt-0.5 flex-shrink-0' />
+                      <Icons.StorageIcon className='w-4 h-4 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0' />
                       <span>任務會自動保存到本地儲存</span>
                     </li>
                     <li className='flex items-start gap-2'>
-                      <Icons.SettingsIcon className='w-4 h-4 text-success-600 dark:text-success-400 mt-0.5 flex-shrink-0' />
+                      <Icons.SettingsIcon className='w-4 h-4 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0' />
                       <span>支援鍵盤快捷鍵（Enter 添加任務）</span>
                     </li>
                     <li className='flex items-start gap-2'>
-                      <Icons.CleanIcon className='w-4 h-4 text-success-600 dark:text-success-400 mt-0.5 flex-shrink-0' />
+                      <Icons.CleanIcon className='w-4 h-4 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0' />
                       <span>可以批量清除已完成的任務</span>
                     </li>
                     <li className='flex items-start gap-2'>
-                      <Icons.ThemeIcon className='w-4 h-4 text-success-600 dark:text-success-400 mt-0.5 flex-shrink-0' />
+                      <Icons.ThemeIcon className='w-4 h-4 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0' />
                       <span>支援暗色主題，保護眼睛</span>
                     </li>
                   </ul>
@@ -247,16 +247,16 @@ const About = memo(({ className }: AboutProps) => {
                 以及各種性能優化技術，為開發者提供了一個優秀的學習和參考範本。
               </p>
               <div className='flex flex-wrap justify-center gap-2'>
-                <span className='px-3 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-200 rounded-full text-sm'>
+                <span className='px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 rounded-full text-sm'>
                   實用性
                 </span>
-                <span className='px-3 py-1 bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-200 rounded-full text-sm'>
+                <span className='px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200 rounded-full text-sm'>
                   高性能
                 </span>
-                <span className='px-3 py-1 bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200 rounded-full text-sm'>
+                <span className='px-3 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200 rounded-full text-sm'>
                   易維護
                 </span>
-                <span className='px-3 py-1 bg-error-100 dark:bg-error-900/30 text-error-800 dark:text-error-200 rounded-full text-sm'>
+                <span className='px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200 rounded-full text-sm'>
                   美觀
                 </span>
               </div>
