@@ -17,7 +17,7 @@ function VirtualList<T>({
   renderItem,
   overscan = 5,
   onScroll,
-  className
+  className,
 }: VirtualListProps<T>) {
   const [scrollTop, setScrollTop] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -25,7 +25,10 @@ function VirtualList<T>({
   const totalHeight = items.length * itemHeight;
   const visibleCount = Math.ceil(containerHeight / itemHeight);
   const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
-  const endIndex = Math.min(items.length - 1, startIndex + visibleCount + overscan * 2);
+  const endIndex = Math.min(
+    items.length - 1,
+    startIndex + visibleCount + overscan * 2
+  );
 
   const visibleItems = useMemo(() => {
     return items.slice(startIndex, endIndex + 1).map((item, index) => ({
@@ -58,10 +61,7 @@ function VirtualList<T>({
           }}
         >
           {visibleItems.map(({ item, index }) => (
-            <div
-              key={index}
-              style={{ height: itemHeight }}
-            >
+            <div key={index} style={{ height: itemHeight }}>
               {renderItem(item, index)}
             </div>
           ))}
@@ -71,4 +71,6 @@ function VirtualList<T>({
   );
 }
 
-export default memo(VirtualList) as <T>(props: VirtualListProps<T>) => JSX.Element;
+export default memo(VirtualList) as <T>(
+  props: VirtualListProps<T>
+) => React.JSX.Element;

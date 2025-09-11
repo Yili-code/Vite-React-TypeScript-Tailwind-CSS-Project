@@ -1,9 +1,26 @@
 import { KeyboardShortcut } from '@/types';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
+/**
+ * 鍵盤快捷鍵 Hook
+ * @param shortcuts 快捷鍵配置數組
+ */
 export function useKeyboardShortcuts(shortcuts: KeyboardShortcut[]) {
+  const shortcutsRef = useRef(shortcuts);
+  
+  // 更新 ref 以確保總是使用最新的 shortcuts
+  useEffect(() => {
+    shortcutsRef.current = shortcuts;
+  }, [shortcuts]);
+
   const handleKeyDown = useCallback((event: KeyboardEvent) => {
-    shortcuts.forEach(shortcut => {
+    // 如果焦點在輸入元素上，跳過某些快捷鍵
+    const target = event.target as HTMLElement;
+    const isInputElement = target.tagName === 'INPUT' || 
+                          target.tagName === 'TEXTAREA' || 
+                          target.contentEditable === 'true';
+
+    shortcutsRef.current.forEach(shortcut => {
       const {
         key,
         ctrlKey = false,
@@ -13,21 +30,30 @@ export function useKeyboardShortcuts(shortcuts: KeyboardShortcut[]) {
         action
       } = shortcut;
 
+      // 檢查是否匹配修飾鍵
       const isCtrlMatch = ctrlKey === event.ctrlKey;
       const isMetaMatch = metaKey === event.metaKey;
       const isShiftMatch = shiftKey === event.shiftKey;
       const isAltMatch = altKey === event.altKey;
       const isKeyMatch = key.toLowerCase() === event.key.toLowerCase();
 
+      // 如果匹配且不在輸入元素中，則執行動作
       if (isCtrlMatch && isMetaMatch && isShiftMatch && isAltMatch && isKeyMatch) {
-        event.preventDefault();
-        action();
+        // 對於某些快捷鍵，即使在輸入元素中也要執行
+        const globalShortcuts = ['Escape', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'];
+        const isGlobalShortcut = globalShortcuts.includes(key);
+        
+        if (!isInputElement || isGlobalShortcut) {
+          event.preventDefault();
+          event.stopPropagation();
+          action();
+        }
       }
     });
-  }, [shortcuts]);
+  }, []);
 
   useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown, { passive: false });
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [handleKeyDown]);
 }
