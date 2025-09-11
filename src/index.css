@@ -34,12 +34,12 @@
 
   /* 選取文字樣式 */
   ::selection {
-    @apply bg-primary-200 dark:bg-primary-800 text-primary-900 dark:text-primary-100;
+    @apply bg-blue-200 dark:bg-blue-800 text-blue-900 dark:text-blue-100;
   }
 
   /* 焦點樣式 */
   *:focus-visible {
-    @apply outline-none ring-2 ring-primary-500 ring-offset-2 dark:ring-offset-gray-900;
+    @apply outline-none ring-2 ring-blue-500 ring-offset-2 dark:ring-offset-gray-900;
   }
 
   /* 平滑過渡 */
@@ -55,23 +55,23 @@
   }
 
   .btn-primary {
-    @apply btn bg-primary-600 hover:bg-primary-700 text-white focus:ring-primary-500 dark:bg-primary-500 dark:hover:bg-primary-600;
+    @apply btn bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-500 dark:bg-blue-500 dark:hover:bg-blue-600;
   }
 
   .btn-secondary {
-    @apply btn bg-secondary-200 hover:bg-secondary-300 text-secondary-800 focus:ring-secondary-500 dark:bg-secondary-700 dark:hover:bg-secondary-600 dark:text-secondary-200;
+    @apply btn bg-gray-200 hover:bg-gray-300 text-gray-800 focus:ring-gray-500 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200;
   }
 
   .btn-success {
-    @apply btn bg-success-600 hover:bg-success-700 text-white focus:ring-success-500 dark:bg-success-500 dark:hover:bg-success-600;
+    @apply btn bg-green-600 hover:bg-green-700 text-white focus:ring-green-500 dark:bg-green-500 dark:hover:bg-green-600;
   }
 
   .btn-warning {
-    @apply btn bg-warning-600 hover:bg-warning-700 text-white focus:ring-warning-500 dark:bg-warning-500 dark:hover:bg-warning-600;
+    @apply btn bg-yellow-600 hover:bg-yellow-700 text-white focus:ring-yellow-500 dark:bg-yellow-500 dark:hover:bg-yellow-600;
   }
 
   .btn-error {
-    @apply btn bg-error-600 hover:bg-error-700 text-white focus:ring-error-500 dark:bg-error-500 dark:hover:bg-error-600;
+    @apply btn bg-red-600 hover:bg-red-700 text-white focus:ring-red-500 dark:bg-red-500 dark:hover:bg-red-600;
   }
 
   /* 卡片組件 - 優化版本 */
@@ -85,7 +85,7 @@
 
   /* 輸入框組件 - 優化版本 */
   .input {
-    @apply block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white transition-colors duration-200;
+    @apply block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition-colors duration-200;
   }
 
   .label {
@@ -98,7 +98,7 @@
   }
 
   .nav-link-active {
-    @apply nav-link text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20;
+    @apply nav-link text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20;
   }
 
   .nav-link-inactive {
@@ -124,7 +124,7 @@
 
   /* 文字效果 */
   .text-gradient {
-    @apply bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-blue-600 to-gray-600 bg-clip-text text-transparent;
   }
 
   .text-shadow {
@@ -133,16 +133,16 @@
 
   /* 背景效果 */
   .bg-gradient-primary {
-    @apply bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20;
+    @apply bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20;
   }
 
   .bg-gradient-secondary {
-    @apply bg-gradient-to-br from-secondary-50 to-secondary-100 dark:from-secondary-900/20 dark:to-secondary-800/20;
+    @apply bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900/20 dark:to-gray-800/20;
   }
 
   /* 載入動畫 */
   .loading-spinner {
-    @apply animate-spin rounded-full border-2 border-gray-300 border-t-primary-600;
+    @apply animate-spin rounded-full border-2 border-gray-300 border-t-blue-600;
   }
 
   .loading-dots {
@@ -150,7 +150,7 @@
   }
 
   .loading-dots > div {
-    @apply w-2 h-2 bg-primary-600 rounded-full animate-bounce;
+    @apply w-2 h-2 bg-blue-600 rounded-full animate-bounce;
   }
 
   .loading-dots > div:nth-child(2) {
@@ -328,7 +328,7 @@
 
   /* 打字機效果 */
   .typewriter {
-    @apply overflow-hidden whitespace-nowrap border-r-2 border-primary-500 animate-typewriter;
+    @apply overflow-hidden whitespace-nowrap border-r-2 border-blue-500 animate-typewriter;
   }
 
   /* 脈衝效果 */
@@ -338,7 +338,7 @@
 
   .pulse-ring::before {
     content: '';
-    @apply absolute inset-0 rounded-full border-2 border-primary-500 animate-ping;
+    @apply absolute inset-0 rounded-full border-2 border-blue-500 animate-ping;
   }
 
   /* 3D 翻轉效果 */
